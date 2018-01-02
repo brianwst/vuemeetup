@@ -15,6 +15,11 @@
           <v-icon>{{item.icon}}</v-icon>
           {{item.title}}
         </v-btn>
+        <!-- Logout -->
+        <v-btn v-if="isUserAuthenticated" @click="onLogOut">
+          <v-icon>exit_to_app</v-icon>
+          Logout
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-navigation-drawer temporary v-model="sideNav">
@@ -34,6 +39,12 @@
             <v-icon>{{item.icon}}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>{{item.title}}</v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile v-if="isUserAuthenticated" @click="onLogOut">
+          <v-list-tile-action>
+            <v-icon flat>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Logout</v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
@@ -66,6 +77,11 @@
       },
       isUserAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      }
+    },
+    methods: {
+      onLogOut () {
+        this.$store.dispatch('userLogOut')
       }
     }
   }

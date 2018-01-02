@@ -35,6 +35,12 @@ new Vue({
       projectId: 'vue-meetup-14951',
       storageBucket: ''
     })
+    // firebase api to observe user login state
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch('autoLogin', user)
+      }
+    })
     this.$store.dispatch('loadMeetup')
   },
   render: h => h(App)
