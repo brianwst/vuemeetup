@@ -28,6 +28,9 @@ export const store = new Vuex.Store({
     error: null
   },
   mutations: {
+    loadMeetup (state, payload) {
+      state.loadedMeetups = payload
+    },
     createMeetup (state, payload) {
       state.loadedMeetups.push(payload)
     },
@@ -45,17 +48,49 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    loadMeetup ({commit}) {
+      commit('loadState', true)
+      firebase.database().ref('meetups').once('value')
+        .then((data) => {
+          const meetups = []
+          const obj = data.val()
+          console.log(obj)
+          for (let key in obj) {
+            meetups.push({
+              id: key,
+              title: obj[key].title,
+              description: obj[key].description,
+              date: obj[key].date,
+              imageUrl: obj[key].imageUrl,
+              location: obj[key].location
+            })
+          }
+          commit('loadMeetup', meetups)
+          commit('loadState', false)
+        }).catch((error) => {
+          console.log(error)
+          commit('loadState', false)
+        })
+    },
     createMeetup ({commit}, payload) {
       const meetup = {
         title: payload.title,
         location: payload.location,
         imageUrl: payload.imageUrl,
         description: payload.description,
-        date: payload.date,
-        id: '3'
+        date: payload.date.toString()
       }
+      firebase.database().ref('meetups').push(meetup)
+        .then((data) => {
+          console.log(data)
+          commit('createMeetup', {
+            ...meetup,
+            id: data.key
+          })
+        }).catch((err) => {
+          console.log(err)
+        })
        // Send to firebase
-      commit('createMeetup', meetup)
     },
     createUser ({commit}, payload) {
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password).then(
@@ -96,6 +131,9 @@ export const store = new Vuex.Store({
     }
   },
   getters: {
+    loadingState (state) {
+      return state.loading
+    },
     loadedMeetups (state) {
       return state.loadedMeetups.sort((meetupA, meetupB) => {
         return meetupA.date > meetupB.date

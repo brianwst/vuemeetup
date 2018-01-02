@@ -1,5 +1,6 @@
 <template lang="html">
   <v-container>
+
     <v-layout row wrap>
       <v-flex xs12 sm6 class="text-xs-center text-sm-right">
         <v-btn large router-link to="/meetups" class="primary">View Meetup</v-btn>
@@ -8,10 +9,19 @@
         <v-btn large router-link to="/meetup/new" class="primary">Create Meetup</v-btn>
       </v-flex>
     </v-layout>
-
+    <v-layout row>
+      <v-flex xs12 sm6 class="text-xs-center text-sm-right">
+        <v-progress-circular
+          indeterminate
+          :width="7"
+          :size="70"
+          v-if="loading"
+          color="secondary"></v-progress-circular>
+      </v-flex>
+    </v-layout>
     <v-layout row wrap>
       <v-flex xs12>
-        <v-carousel style="cursor: pointer">
+        <v-carousel style="cursor: pointer" v-if="!loading">
           <v-carousel-item
             v-for="meetup in meetups"
             v-bind:key="meetup.id"
@@ -36,6 +46,9 @@ export default {
   computed: {
     meetups () {
       return this.$store.getters.loadedMeetups
+    },
+    loading () {
+      return this.$store.getters.loadingState
     }
   },
   methods: {

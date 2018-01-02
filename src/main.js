@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.css'
 import { store } from './store'
@@ -36,6 +35,7 @@ new Vue({
       projectId: 'vue-meetup-14951',
       storageBucket: ''
     })
+    this.$store.dispatch('loadMeetup')
   },
   render: h => h(App)
 })
