@@ -35,18 +35,19 @@
           <!-- Image -->
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <v-text-field
-              name="imageUrl"
-              label="Image URL"
-              id="image-url"
-              v-model="imageUrl"
-              required
-              ></v-text-field>
+              <v-btn class="primary" raised @click="savePhoto">Upload photo</v-btn>
+              <input
+                type="file"
+                name="file"
+                accept="image/*"
+                ref="photoUpload"
+                style="display: none"
+                @change="onPhotoPicked">
             </v-flex>
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <img :src="imageUrl" height="300px" >
+              <img :src="imageUrl" height="150">
             </v-flex>
           </v-layout>
           <!-- Description -->
@@ -149,6 +150,22 @@ export default {
       }
       this.$store.dispatch('createMeetup', meetupData)
       this.$router.push('/meetups')
+    },
+    savePhoto () {
+      this.$refs.photoUpload.click()
+    },
+    onPhotoPicked (event) {
+      const files = event.target.files
+      let filename = files[0].name
+      if (filename.lastIndexOf() <= 0) {
+        console.log('input valid file format')
+      }
+      // File Reader API
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        this.imageUrl = fileReader.result
+      })
+      fileReader.readAsDataURL(files[0])
     }
   }
 }
