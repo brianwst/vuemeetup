@@ -105,7 +105,8 @@ export default {
       imageUrl: '',
       description: '',
       date: '',
-      time: new Date()
+      time: new Date(),
+      image: null
     }
   },
   computed: {
@@ -141,12 +142,17 @@ export default {
       if (!this.inputIsValid) {
         return
       }
+      if (!this.image) {
+        return
+      }
+      // Check if image is attached
       const meetupData = {
         title: this.title,
         location: this.location,
         imageUrl: this.imageUrl,
         description: this.description,
-        date: this.submitTime
+        date: this.submitTime,
+        image: this.image
       }
       this.$store.dispatch('createMeetup', meetupData)
       this.$router.push('/meetups')
@@ -166,6 +172,7 @@ export default {
         this.imageUrl = fileReader.result
       })
       fileReader.readAsDataURL(files[0])
+      this.image = files[0]
     }
   }
 }
