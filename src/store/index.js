@@ -47,6 +47,9 @@ export const store = new Vuex.Store({
       if (payload.location) {
         meetup.location = payload.location
       }
+      if (payload.date) {
+        meetup.date = payload.date
+      }
     },
     setUser (state, payload) {
       state.user = payload
@@ -98,6 +101,9 @@ export const store = new Vuex.Store({
       }
       if (payload.location) {
         updates.location = payload.location
+      }
+      if (payload.date) {
+        updates.date = payload.date
       }
       return firebase.database().ref('meetups').child(payload.id).update(updates).then(() => {
         commit('updateMeetup', payload)

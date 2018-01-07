@@ -1,5 +1,5 @@
 <template>
-  <v-dialog width="350px" persistent v-model="dialog">
+  <v-dialog width="350px" v-model="dialog">
     <v-btn fab slot="activator">
       <v-icon>edit</v-icon>
     </v-btn>
@@ -68,7 +68,7 @@ export default {
   props: ['meetup'],
   data () {
     return {
-      dialog: true,
+      dialog: false,
       title: this.meetup.title,
       location: this.meetup.location,
       description: this.meetup.description

@@ -29,6 +29,9 @@
               {{ meetup.date | datefilter }} - {{ meetup.location }}
             </div>
             <div>
+              <app-edit-date :meetup="meetup"></app-edit-date>
+            </div>
+            <div>
               {{ meetup.description }}
             </div>
           </v-card-text>
@@ -44,9 +47,11 @@
 
 <script>
 import EditMeetup from './EditMeetup.vue'
+import EditDate from './EditDate.vue'
 export default {
   components: {
-    'app-edit-meetup': EditMeetup
+    'app-edit-meetup': EditMeetup,
+    'app-edit-date': EditDate
   },
   computed: {
     loading () {
