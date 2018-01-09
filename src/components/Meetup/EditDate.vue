@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  props: ["meetup"],
+  props: ['meetup'],
   data () {
     return {
       dialog: false,
@@ -64,7 +64,7 @@ export default {
       })
       this.dialog = false
     }
-  },
+  }
   // created () {
   //   const date = new Date(this.meetup.date)
   //   const day = date.getDate()
@@ -72,9 +72,6 @@ export default {
   //   const year = date.getYear()
   //   this.editDate = year + "-" + month + "-" + day
   // }
-
-
-
 }
 </script>
 

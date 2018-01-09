@@ -29,7 +29,7 @@
               {{ meetup.date | datefilter }} - {{ meetup.location }}
             </div>
             <div>
-              <app-edit-date :meetup="meetup"></app-edit-date>
+              <app-edit-date :meetup="meetup" v-if="isCurrentUser"></app-edit-date>
             </div>
             <div>
               {{ meetup.description }}
@@ -37,7 +37,7 @@
           </v-card-text>
           <v-card-actions>
              <v-spacer></v-spacer>
-             <v-btn class="primary">Register </v-btn>
+             <app-register-meetup :meetup="meetup"></app-register-meetup>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -48,10 +48,12 @@
 <script>
 import EditMeetup from './EditMeetup.vue'
 import EditDate from './EditDate.vue'
+import RegisterMeetup from './registerMeetup.vue'
 export default {
   components: {
     'app-edit-meetup': EditMeetup,
-    'app-edit-date': EditDate
+    'app-edit-date': EditDate,
+    'app-register-meetup': RegisterMeetup
   },
   computed: {
     loading () {

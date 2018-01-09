@@ -28,6 +28,16 @@ export const store = new Vuex.Store({
     error: null
   },
   mutations: {
+    registerMeetup (state, payload) {
+      const id = payload.id
+      if (state.user.registeredMeetups.findIndex(meetup => meetup.id === id) >= 0) {
+        return
+      }
+      console.log(state.user)
+      state.user.registeredMeetups.push(payload.id)
+      state.user.fbKeys[id] = payload.fbId
+      console.log(state.user)
+    },
     loadMeetup (state, payload) {
       state.loadedMeetups = payload
     },
@@ -65,6 +75,21 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    registerUsers ({commit, getters}, payload) {
+      commit('loadState', true)
+      const userId = getters.user.id
+      firebase.database().ref('users/' + userId).child('/registration').push(payload).then(data => {
+        // const firebaseId = data
+        commit('registerMeetup', {
+          id: payload,
+          fbId: data.key
+        })
+        commit('loadState', false)
+      }).catch(error => {
+        console.log(error)
+        commit('loadState', false)
+      })
+    },
     loadMeetup ({commit}) {
       commit('loadState', true)
       firebase.database().ref('meetups').once('value')
@@ -155,7 +180,8 @@ export const store = new Vuex.Store({
         user => {
           const newUser = {
             id: user.uid,
-            registeredMeetups: []
+            registeredMeetups: [],
+            fbKeys: {}
           }
           commit('clearError')
           commit('setUser', newUser)
@@ -172,7 +198,8 @@ export const store = new Vuex.Store({
         user => {
           const loggedInUser = {
             id: user.uid,
-            registeredMeetups: []
+            registeredMeetups: [],
+            fbKeys: {}
           }
           commit('clearError')
           commit('setUser', loggedInUser)
@@ -185,7 +212,7 @@ export const store = new Vuex.Store({
       )
     },
     autoLogin ({commit}, payload) {
-      commit('setUser', {id: payload.uid, registeredMeetups: []})
+      commit('setUser', {id: payload.uid, registeredMeetups: [], fbKeys: {}})
     },
     userLogOut ({commit}) {
       firebase.auth().signOut()
