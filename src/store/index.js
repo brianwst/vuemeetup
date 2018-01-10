@@ -33,9 +33,13 @@ export const store = new Vuex.Store({
       if (state.user.registeredMeetups.findIndex(meetup => meetup.id === id) >= 0) {
         return
       }
-      console.log(state.user)
       state.user.registeredMeetups.push(payload.id)
       state.user.fbKeys[id] = payload.fbId
+    },
+    deregisterMeetup (state, payload) {
+      const registeredMeetups = state.user.registeredMeetups
+      registeredMeetups.splice(registeredMeetups.indexOf(payload), 1)
+      Reflect.deleteProperty(state.user.fbKeys, payload)
       console.log(state.user)
     },
     loadMeetup (state, payload) {
@@ -84,6 +88,21 @@ export const store = new Vuex.Store({
           id: payload,
           fbId: data.key
         })
+        commit('loadState', false)
+      }).catch(error => {
+        console.log(error)
+        commit('loadState', false)
+      })
+    },
+    deregisterUsers ({commit, getters}, payload) {
+      commit('loadState', true)
+      if (!getters.user.fbKeys) {
+        return
+      }
+      const userId = getters.user.id
+      const fbKey = getters.user.fbKeys[payload]
+      firebase.database().ref('users/' + userId + '/registration/').child(fbKey).remove().then((data) => {
+        commit('deregisterMeetup', payload)
         commit('loadState', false)
       }).catch(error => {
         console.log(error)

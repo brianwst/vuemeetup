@@ -1,13 +1,16 @@
 <template lang="html">
   <v-dialog persistent width="350px" v-model="dialog">
-    <v-btn accent slot="activator">
+    <v-btn accent slot="activator" v-if="userIsRegistered">
+      Cancel Meetup
+    </v-btn>
+    <v-btn accent slot="activator" v-else>
       Register Meetup
     </v-btn>
     <v-card>
       <v-layout row>
         <v-flex xs12>
-          <v-card-title v-if="userIsRegistered">Register for the event</v-card-title>
-          <v-card-title v-else>Cancel registration</v-card-title>
+          <v-card-title v-if="userIsRegistered">Cancel registration</v-card-title>
+          <v-card-title v-else>Register for the event</v-card-title>
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
@@ -24,8 +27,11 @@
              <v-btn flat @click="dialog = false" class="red--text  darken-1">
                Cancel
              </v-btn>
-             <v-btn flat class="green--text darken-1" @click="onChange">
-               Edit Date
+             <v-btn flat class="green--text darken-1" @click="onChange" v-if="userIsRegistered">
+               Deregister
+             </v-btn>
+             <v-btn flat class="green--text darken-1" @click="onChange" v-else>
+               Register
              </v-btn>
            </v-card-actions>
         </v-flex>
@@ -54,7 +60,11 @@ export default {
       // if (!this.userIsRegistered) {
       //   return
       // }
-      this.$store.dispatch('registerUsers', this.meetup.id)
+      if (this.userIsRegistered) {
+        this.$store.dispatch('deregisterUsers', this.meetup.id)
+      } else {
+        this.$store.dispatch('registerUsers', this.meetup.id)
+      }
     }
   }
 }
