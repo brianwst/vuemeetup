@@ -33,15 +33,16 @@ new Vue({
       authDomain: 'vue-meetup-14951.firebaseapp.com',
       databaseURL: 'https://vue-meetup-14951.firebaseio.com',
       projectId: 'vue-meetup-14951',
-      storageBucket: ''
+      storageBucket: 'gs://vue-meetup-14951.appspot.com/'
     })
+    this.$store.dispatch('loadMeetup')
     // firebase api to observe user login state
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch('autoLogin', user)
+        this.$store.dispatch('fetchUserData')
       }
     })
-    this.$store.dispatch('loadMeetup')
   },
   render: h => h(App)
 })
