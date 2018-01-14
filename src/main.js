@@ -35,6 +35,7 @@ new Vue({
       projectId: 'vue-meetup-14951',
       storageBucket: 'gs://vue-meetup-14951.appspot.com/'
     })
+    this.$store.dispatch('loadMeetup')
     // firebase api to observe user login state
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -42,7 +43,6 @@ new Vue({
         this.$store.dispatch('fetchUserData')
       }
     })
-    this.$store.dispatch('loadMeetup')
   },
   render: h => h(App)
 })

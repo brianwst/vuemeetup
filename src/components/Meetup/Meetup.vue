@@ -37,7 +37,7 @@
           </v-card-text>
           <v-card-actions>
              <v-spacer></v-spacer>
-             <app-register-meetup :meetup="meetup"></app-register-meetup>
+             <app-register-meetup :meetup="meetup" v-if="isUserAuthenticated"></app-register-meetup>
           </v-card-actions>
         </v-card>
       </v-flex>
